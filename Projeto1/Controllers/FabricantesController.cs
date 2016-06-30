@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Projeto1.Models;
-using System.Data.Entity;
 using Projeto1.Contexts;
+using Projeto1.Models;
 using System.Net;
+using System.Data.Entity;
 
 namespace Projeto1.Controllers
 {
-    public class CategoriasController : Controller
+    public class FabricantesController : Controller
     {
-        private EFContext context = new EFContext();
+        //Instanciando um um contexto do EF
+        private EFContext contex = new EFContext();
 
-        // GET: Categorias
+        // GET: Fabricantes
         public ActionResult Index()
         {
-            return View(context.Categorias.OrderBy(c => c.Nome));
+            return View(contex.Fabricantes.OrderBy(c => c.Nome));
         }
 
         // GET: Create
@@ -26,52 +27,45 @@ namespace Projeto1.Controllers
             return View();
         }
 
-        //POST: Create
+        // POST: Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Categoria categoria)
+        public ActionResult Create(Fabricante fabricante)
         {
-            //Adicionando a categoria na lista
-            context.Categorias.Add(categoria);
-            context.SaveChanges();
+            contex.Fabricantes.Add(fabricante);
+            contex.SaveChanges();
             return RedirectToAction("Index");
-
-            /*//Pegando o id do valor máximo da lista + 1 
-            categoria.CategoriaID = categorias.Select(m => m.CategoriaID).Max() + 1;
-            */
         }
 
         //GET: Edit
-        public ActionResult Edit(long? id)
+        public ActionResult Edit (long? id)
         {
-            /*//Retorna a View com o ID passado (ID é achado na lista com LINQ)
-            return View(categorias.Where(m => m.CategoriaID == id).First());*/
-            if (id == null)
+            if(id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Tenta achar o fabricante
-            Categoria categoria = context.Categorias.Find(id);
-            if (categoria == null)
+            Fabricante fabricante = contex.Fabricantes.Find(id);
+            if(fabricante == null)
             {
                 //Se não, dá um erro
                 return HttpNotFound();
             }
-            return View(categoria);
+            return View(fabricante);
         }
 
         //POST: Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Categoria categoria)
+        public ActionResult Edit(Fabricante fabricante)
         {
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
-                context.Entry(categoria).State = EntityState.Modified;
-                context.SaveChanges();
+                contex.Entry(fabricante).State = EntityState.Modified;
+                contex.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(categoria);
+            return View(fabricante);
         }
 
         //GET: Details
@@ -82,13 +76,13 @@ namespace Projeto1.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Tenta achar o fabricante
-            Categoria categoria = context.Categorias.Find(id);
-            if (categoria == null)
+            Fabricante fabricante = contex.Fabricantes.Find(id);
+            if (fabricante == null)
             {
                 //Se não, dá um erro
                 return HttpNotFound();
             }
-            return View(categoria);
+            return View(fabricante);
         }
 
         //GET: Delete
@@ -99,13 +93,13 @@ namespace Projeto1.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Tenta achar o fabricante
-            Categoria categoria = context.Categorias.Find(id);
-            if (categoria == null)
+            Fabricante fabricante = contex.Fabricantes.Find(id);
+            if (fabricante == null)
             {
                 //Se não, dá um erro
                 return HttpNotFound();
             }
-            return View(categoria);
+            return View(fabricante);
         }
 
         //POST: Delete
@@ -113,9 +107,9 @@ namespace Projeto1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(long id)
         {
-            Categoria categoria = context.Categorias.Find(id);
-            context.Categorias.Remove(categoria);
-            context.SaveChanges();
+            Fabricante fabricante = contex.Fabricantes.Find(id);
+            contex.Fabricantes.Remove(fabricante);
+            contex.SaveChanges();
             return RedirectToAction("Index");
         }
     }
