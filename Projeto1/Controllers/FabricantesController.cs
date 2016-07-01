@@ -110,6 +110,7 @@ namespace Projeto1.Controllers
             Fabricante fabricante = contex.Fabricantes.Find(id);
             contex.Fabricantes.Remove(fabricante);
             contex.SaveChanges();
+            TempData["Message"] = "Fabricante" + fabricante.Nome.ToUpper() + " foi removido comm sucesso";
             return RedirectToAction("Index");
         }
     }
